@@ -33,8 +33,11 @@ try
   compilers.dust = (module, filename) ->
     content = dust.compile(fs.readFileSync(filename, 'utf8'), filename)
     module._compile """
+      var dust = this.dust || require('dustjs-linkedin');
+      
       var compiled = '#{content}';
       dust.loadSource(compiled);
+      
       module.exports = function (data, cb) {
         dust.render('#{filename}', data, cb);
       };
