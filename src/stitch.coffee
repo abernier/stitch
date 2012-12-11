@@ -35,7 +35,7 @@ try
     module._compile """
       var dust = this.dust || require('dustjs-linkedin');
       
-      var compiled = '#{content}'.replace('HaAACK', module.id);
+      var compiled = #{JSON.stringify(content)}.replace('HaAACK', module.id);
       dust.loadSource(compiled);
       
       module.exports = function (data, cb) {
