@@ -27,6 +27,19 @@ try
       content = eco.compile fs.readFileSync filename, 'utf8'
       module._compile content, filename
 catch err
+  
+try
+  dust = require 'dustjs-linkedin'
+  compilers.dust = (module, filename) ->
+    content = dust.compile(fs.readFileSync(filename, 'utf8'), filename)
+    module._compile """
+      var compiled = '#{content}';
+      dust.loadSource(compiled);
+      module.exports = function (data, cb) {
+        dust.render('#{filename}', data, cb);
+      };
+    """, filename
+catch err
 
 
 exports.Package = class Package
