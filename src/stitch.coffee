@@ -31,15 +31,15 @@ catch err
 try
   dust = require 'dustjs-linkedin'
   compilers.dust = (module, filename) ->
-    content = dust.compile(fs.readFileSync(filename, 'utf8'), filename)
+    content = dust.compile(fs.readFileSync(filename, 'utf8'), 'HaAACK')
     module._compile """
       var dust = this.dust || require('dustjs-linkedin');
       
-      var compiled = '#{content}';
+      var compiled = '#{content}'.replace('HaAACK', module.id);
       dust.loadSource(compiled);
       
       module.exports = function (data, cb) {
-        dust.render('#{filename}', data, cb);
+        dust.render(module.id, data, cb);
       };
     """, filename
 catch err
